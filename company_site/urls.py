@@ -1,6 +1,19 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
+
+# Підрозділи (/contacts/france, /about/history, ...): адреси з опціональним слешем.
+# Мають стояти ВИЩЕ за catch-all, інакше /contacts/france покаже головну контактів.
+subsection_routes = [
+    re_path(
+        rf"^{section}/{slug}/?$",
+        views.subsection,
+        {"section": section, "slug": slug},
+        name=f"{section}-{slug}",
+    )
+    for section, pages in views.SUBSECTIONS.items()
+    for slug in pages
+]
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -9,6 +22,8 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("contacts/", views.contacts, name="contacts"),
     path("contact/", views.contacts, name="contact-alt"),
+
+    *subsection_routes,
 
     # catch-all для кожного розділу; порядок важливий: точні адреси вище,
     # <path:rest> ловить будь-який залишок шляху (разом зі слешами)

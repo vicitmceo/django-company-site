@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block content %}
+  <div class="date"><a href="{% url section %}">← {{ section_title }}</a></div>
+  <h1>{{ page.title }}</h1>
+  <div class="grid" style="margin-top:24px">
+    {% for line in page.lines %}
+      <div class="card"><p>{{ line }}</p></div>
+    {% endfor %}
+  </div>
+  <p class="lead" style="margin-top:32px">Інші підрозділи:
+    {% for key, title in siblings %}
+      <a href="/{{ section }}/{{ key }}/">{{ title }}</a>{% if not forloop.last %} · {% endif %}
+    {% endfor %}
+  </p>
+{% endblock %}
