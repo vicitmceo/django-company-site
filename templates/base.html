@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Обрій{% endblock %} — Компанія «Обрій»</title>
+  <style>
+    :root { --ink: #1c2434; --accent: #e07a1f; --bg: #f5f3ee; --card: #fff; --muted: #6b7280; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Georgia, "Times New Roman", serif; background: var(--bg); color: var(--ink); }
+    header { background: var(--ink); }
+    .bar { max-width: 960px; margin: 0 auto; padding: 18px 24px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .logo { color: #fff; font-size: 24px; font-weight: 700; text-decoration: none; margin-right: auto; letter-spacing: .5px; }
+    .logo span { color: var(--accent); }
+    nav a { color: #c9d1e0; text-decoration: none; font-family: Arial, sans-serif; font-size: 15px; padding: 6px 0; margin-left: 20px; border-bottom: 2px solid transparent; }
+    nav a:hover, nav a.active { color: #fff; border-bottom-color: var(--accent); }
+    main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
+    h1 { font-size: 40px; margin: 0 0 8px; }
+    .lead { color: var(--muted); font-size: 19px; margin-bottom: 32px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .card { background: var(--card); border-radius: 10px; padding: 22px; border-top: 4px solid var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .card h2, .card h3 { margin: 0 0 8px; }
+    .card p { margin: 0; color: #333; line-height: 1.55; }
+    .date { font-family: Arial, sans-serif; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    a.card { color: inherit; text-decoration: none; }
+    a.card:hover { box-shadow: 0 6px 16px rgba(0,0,0,.12); }
+    footer { text-align: center; color: var(--muted); font-family: Arial, sans-serif; font-size: 13px; padding: 32px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <a class="logo" href="{% url 'home' %}">Об<span>рій</span></a>
+      <nav>
+        <a href="{% url 'news' %}" {% if active == 'news' %}class="active"{% endif %}>Новини</a>
+        <a href="{% url 'management' %}" {% if active == 'management' %}class="active"{% endif %}>Керівництво</a>
+        <a href="{% url 'about' %}" {% if active == 'about' %}class="active"{% endif %}>Про компанію</a>
+        <a href="{% url 'contacts' %}" {% if active == 'contacts' %}class="active"{% endif %}>Контакти</a>
+      </nav>
+    </div>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer>© Компанія «Обрій». Навчальний вебдодаток на Django.</footer>
+</body>
+</html>

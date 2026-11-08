@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Головна{% endblock %}
+{% block content %}
+  <h1>Ласкаво просимо до «Обрій»</h1>
+  <p class="lead">Ми будуємо програмні рішення для бізнесу: від сайтів до складних сервісів.</p>
+  <div class="grid">
+    <a class="card" href="{% url 'news' %}"><h2>Новини</h2><p>Останні події та оголошення компанії.</p></a>
+    <a class="card" href="{% url 'management' %}"><h2>Керівництво</h2><p>Люди, які ведуть компанію вперед.</p></a>
+    <a class="card" href="{% url 'about' %}"><h2>Про компанію</h2><p>Наша історія, місія та цінності.</p></a>
+    <a class="card" href="{% url 'contacts' %}"><h2>Контакти</h2><p>Як з нами зв'язатися та де нас знайти.</p></a>
+  </div>
+{% endblock %}
