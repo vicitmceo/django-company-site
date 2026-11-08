@@ -1,12 +1,40 @@
 {% extends "base.html" %}
-{% block title %}Головна{% endblock %}
+{% load static %}
 {% block content %}
-  <h1>Ласкаво просимо до «Обрій»</h1>
-  <p class="lead">Ми будуємо програмні рішення для бізнесу: від сайтів до складних сервісів.</p>
+  <section class="hero">
+    <div>
+      <h1>Технології, що відкривають новий обрій</h1>
+      <p class="lead">Ми розробляємо сайти, мобільні застосунки та рішення зі штучним інтелектом для бізнесу в Україні та Європі.</p>
+      <div class="btns">
+        <a class="btn" href="{% url 'services:index' %}">Наші послуги</a>
+        <a class="btn ghost" href="{% url 'contacts' %}">Зв'язатися</a>
+      </div>
+    </div>
+    <img src="{% static 'img/hero.svg' %}" alt="Схід сонця над горизонтом" width="800" height="420">
+  </section>
+
+  <section class="stats" aria-label="Компанія в цифрах">
+    <div class="stat"><b>10</b>років на ринку</div>
+    <div class="stat"><b>200+</b>проєктів</div>
+    <div class="stat"><b>80</b>фахівців</div>
+    <div class="stat"><b>3</b>офіси в Європі</div>
+  </section>
+
+  <h2>Що ми робимо</h2>
   <div class="grid">
-    <a class="card" href="{% url 'news' %}"><h2>Новини</h2><p>Останні події та оголошення компанії.</p></a>
-    <a class="card" href="{% url 'management' %}"><h2>Керівництво</h2><p>Люди, які ведуть компанію вперед.</p></a>
-    <a class="card" href="{% url 'about' %}"><h2>Про компанію</h2><p>Наша історія, місія та цінності.</p></a>
-    <a class="card" href="{% url 'contacts' %}"><h2>Контакти</h2><p>Як з нами зв'язатися та де нас знайти.</p></a>
+    {% for slug, title, icon, text in highlights %}
+      <a class="card" href="{% url 'services:detail' slug %}">
+        <img class="icon" src="{% static 'img/' %}{{ icon }}" alt="">
+        <h3>{{ title }}</h3><p>{{ text }}</p>
+      </a>
+    {% endfor %}
+  </div>
+
+  <h2>Дізнайтеся більше</h2>
+  <div class="grid">
+    <a class="card" href="{% url 'news' %}"><h3>Новини</h3><p>Запуски, відкриття офісів і події компанії.</p></a>
+    <a class="card" href="{% url 'management' %}"><h3>Керівництво</h3><p>Люди, які визначають напрям розвитку.</p></a>
+    <a class="card" href="{% url 'about' %}"><h3>Про компанію</h3><p>Історія, місія та цінності «Обрій».</p></a>
+    <a class="card" href="{% url 'contacts' %}"><h3>Контакти</h3><p>Офіси у Франції, Україні та Австрії.</p></a>
   </div>
 {% endblock %}

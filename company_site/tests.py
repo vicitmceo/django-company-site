@@ -11,7 +11,7 @@ TITLES = {"news": "Новини", "management": "Керівництво комп
 
 class RoutingTest(SimpleTestCase):
     def test_home(self):
-        self.assertContains(self.client.get("/"), "Ласкаво просимо")
+        self.assertContains(self.client.get("/"), "відкривають новий обрій")
 
     def test_sections_and_catch_all_show_their_section(self):
         for section, paths in SECTIONS.items():
@@ -42,3 +42,12 @@ class SubsectionTest(SimpleTestCase):
     def test_unknown_path_still_falls_back_to_section(self):
         response = self.client.get("/contacts/germany")
         self.assertTemplateUsed(response, "contacts.html")
+
+
+class NotFoundTest(SimpleTestCase):
+    def test_unknown_section_returns_404_page(self):
+        for path in ("/blog/", "/xyz", "/shop/item/1"):
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 404)
+                self.assertTemplateUsed(response, "404.html")

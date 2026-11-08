@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Послуги{% endblock %}
+{% block content %}
+  <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Послуги</div>
+  <h1>Послуги</h1>
+  <p class="lead">Повний цикл розробки: від ідеї та дизайну до запуску і підтримки.</p>
+  <div class="grid">
+    {% for slug, service in services %}
+      <a class="card" href="{% url 'services:detail' slug %}">
+        <img class="icon" src="{% static 'img/' %}{{ service.icon }}" alt="">
+        <h3>{{ service.title }}</h3><p>{{ service.summary }}</p>
+        <div class="meta" style="margin-top:12px">{{ service.price }}</div>
+      </a>
+    {% endfor %}
+  </div>
+{% endblock %}

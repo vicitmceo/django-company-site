@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import include, path, re_path
 
 from . import views
 
@@ -15,8 +15,11 @@ subsection_routes = [
     for slug in pages
 ]
 
+handler404 = "company_site.views.not_found"
+
 urlpatterns = [
     path("", views.home, name="home"),
+    path("services/", include("services.urls")),  # окремий додаток
     path("news/", views.news, name="news"),
     path("management/", views.management, name="management"),
     path("about/", views.about, name="about"),
@@ -32,4 +35,7 @@ urlpatterns = [
     path("about/<path:rest>", views.about, name="about-catchall"),
     path("contacts/<path:rest>", views.contacts, name="contacts-catchall"),
     path("contact/<path:rest>", views.contacts, name="contact-alt-catchall"),
+
+    # будь-який інший (неіснуючий) розділ -> сторінка 404
+    re_path(r"^.*$", views.not_found, name="not-found"),
 ]

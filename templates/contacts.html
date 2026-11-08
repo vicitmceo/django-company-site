@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Контакти{% endblock %}
 {% block content %}
+  <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Контакти</div>
   <h1>Контакти</h1>
-  <p class="lead">Будемо раді почути вас.</p>
+  <p class="lead">Будемо раді почути вас. Оберіть найближчий офіс або напишіть нам.</p>
   <div class="grid">
-    <div class="card"><h3>Адреса</h3><p>м. Київ, вул. Хрещатик, 1<br>офіс 25</p></div>
-    <div class="card"><h3>Телефон</h3><p>+380 44 123 45 67<br>Пн–Пт, 9:00–18:00</p></div>
-    <div class="card"><h3>Email</h3><p>info@obriy.example</p></div>
+    <div class="card"><h3>Головний офіс</h3><p>м. Київ, вул. Хрещатик, 1, офіс 25</p></div>
+    <div class="card"><h3>Телефон</h3><p><a href="tel:+380441234567">+380 44 123 45 67</a><br>Пн–Пт, 9:00–18:00</p></div>
+    <div class="card"><h3>Email</h3><p><a href="mailto:info@obriy.example">info@obriy.example</a></p></div>
   </div>
-  <h2 style="margin-top:36px">Наші офіси</h2>
+  <h2>Наші офіси</h2>
   <div class="grid">
-    <a class="card" href="/contacts/ukraine/"><h3>Україна</h3><p>Київ, головний офіс</p></a>
-    <a class="card" href="/contacts/france/"><h3>Франція</h3><p>Париж</p></a>
-    <a class="card" href="/contacts/austria/"><h3>Австрія</h3><p>Відень</p></a>
+    <a class="card" href="{% url 'contacts-ukraine' %}"><h3>Україна</h3><p>Київ — головний офіс</p></a>
+    <a class="card" href="{% url 'contacts-france' %}"><h3>Франція</h3><p>Париж</p></a>
+    <a class="card" href="{% url 'contacts-austria' %}"><h3>Австрія</h3><p>Відень</p></a>
   </div>
 {% endblock %}

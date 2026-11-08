@@ -6,8 +6,16 @@ from django.shortcuts import render
 # головна сторінка цього розділу.
 
 
+HIGHLIGHTS = [
+    ("web", "Веб-розробка", "icon-web.svg", "Сайти, магазини та вебсервіси під ключ."),
+    ("mobile", "Мобільні застосунки", "icon-mobile.svg", "Додатки для iOS та Android."),
+    ("ai", "ШІ та автоматизація", "icon-ai.svg", "Чат-боти та аналітика даних."),
+    ("support", "Підтримка", "icon-support.svg", "Стабільність ваших продуктів 24/7."),
+]
+
+
 def home(request):
-    return render(request, "home.html")
+    return render(request, "home.html", {"highlights": HIGHLIGHTS})
 
 
 def news(request, rest=None):
@@ -84,3 +92,8 @@ def subsection(request, section, slug):
         "siblings": [(key, value["title"]) for key, value in SUBSECTIONS[section].items()],
     }
     return render(request, "subsection.html", context)
+
+
+def not_found(request, exception=None, rest=None):
+    """Сторінка 404 для неіснуючих розділів (працює і як handler404)."""
+    return render(request, "404.html", status=404)

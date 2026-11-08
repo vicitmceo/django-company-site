@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Сторінку не знайдено{% endblock %}
+{% block content %}
+  <div class="notfound">
+    <div class="code">404</div>
+    <h1>Такого розділу немає</h1>
+    <p class="lead" style="margin:0 auto 24px">Можливо, адреса введена з помилкою, або сторінку було переміщено.</p>
+    <div class="btns" style="justify-content:center">
+      <a class="btn" href="{% url 'home' %}">На головну</a>
+      <a class="btn ghost" href="{% url 'services:index' %}">Наші послуги</a>
+    </div>
+  </div>
+{% endblock %}

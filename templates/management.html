@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Керівництво{% endblock %}
 {% block content %}
+  <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Керівництво</div>
   <h1>Керівництво компанії</h1>
-  <p class="lead">Команда, яка відповідає за напрям розвитку.</p>
+  <p class="lead">Команда, яка відповідає за напрям розвитку та якість продуктів.</p>
   <div class="grid">
-    <div class="card"><h3>Олександр Коваленко</h3><div class="date">Генеральний директор</div><p>Керує стратегією компанії та відповідає за ключові партнерства.</p></div>
-    <div class="card"><h3>Марія Шевчук</h3><div class="date">Технічний директор</div><p>Відповідає за архітектуру продуктів та технічну команду.</p></div>
-    <div class="card"><h3>Андрій Мельник</h3><div class="date">Директор з розвитку</div><p>Шукає нові ринки та будує відносини з клієнтами.</p></div>
+    <a class="card" href="{% url 'management-director' %}"><div class="avatar">О</div><h3>Олександр Коваленко</h3><div class="meta">Генеральний директор</div><p>Стратегія компанії та ключові партнерства.</p></a>
+    <a class="card" href="{% url 'management-cto' %}"><div class="avatar">М</div><h3>Марія Шевчук</h3><div class="meta">Технічний директор</div><p>Архітектура продуктів та технічна команда.</p></a>
+    <div class="card"><div class="avatar">А</div><h3>Андрій Мельник</h3><div class="meta">Директор з розвитку</div><p>Нові ринки та відносини з клієнтами.</p></div>
+    <div class="card"><div class="avatar">І</div><h3>Ірина Бойко</h3><div class="meta">Фінансовий директор</div><p>Бюджети, планування та фінансова стабільність.</p></div>
   </div>
 {% endblock %}

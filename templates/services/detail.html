@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ service.title }}{% endblock %}
+{% block content %}
+  <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / <a href="{% url 'services:index' %}">Послуги</a> / {{ service.title }}</div>
+  <h1>{{ service.title }}</h1>
+  <p class="lead">{{ service.summary }}</p>
+  <div class="card">
+    <img class="icon" src="{% static 'img/' %}{{ service.icon }}" alt="">
+    <h3>Що входить</h3>
+    <ul class="checks">{% for point in service.points %}<li>{{ point }}</li>{% endfor %}</ul>
+    <p style="margin-top:18px"><b>Вартість:</b> {{ service.price }}</p>
+    <div class="btns" style="margin-top:18px"><a class="btn" href="{% url 'contacts' %}">Замовити консультацію</a></div>
+  </div>
+  <div class="pills">
+    {% for key, title in others %}<a href="{% url 'services:detail' key %}">{{ title }}</a>{% endfor %}
+  </div>
+{% endblock %}

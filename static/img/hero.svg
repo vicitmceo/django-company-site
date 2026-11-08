@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-label="Схід сонця над горизонтом">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c2434"/><stop offset=".55" stop-color="#5b4a6e"/><stop offset="1" stop-color="#e07a1f"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="420" fill="url(#sky)"/>
+  <circle cx="400" cy="280" r="70" fill="#ffd27a" opacity=".95"/>
+  <circle cx="400" cy="280" r="105" fill="#ffd27a" opacity=".18"/>
+  <g fill="#fff" opacity=".7"><circle cx="90" cy="60" r="2"/><circle cx="210" cy="110" r="1.5"/><circle cx="640" cy="70" r="2"/><circle cx="720" cy="140" r="1.5"/><circle cx="520" cy="40" r="1.5"/><circle cx="330" cy="50" r="2"/></g>
+  <path d="M0 300 Q120 250 240 290 T480 285 T800 300 V420 H0Z" fill="#2c3550"/>
+  <path d="M0 340 Q160 300 320 335 T640 330 T800 345 V420 H0Z" fill="#1c2434"/>
+  <path d="M0 385 Q200 355 400 380 T800 375 V420 H0Z" fill="#11172a"/>
+</svg>
