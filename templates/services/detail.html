@@ -1,18 +1,26 @@
 {% extends "base.html" %}
-{% load static %}
+{% load company_filters %}
 {% block title %}{{ service.title }}{% endblock %}
 {% block content %}
   <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / <a href="{% url 'services:index' %}">Послуги</a> / {{ service.title }}</div>
   <h1>{{ service.title }}</h1>
   <p class="lead">{{ service.summary }}</p>
   <div class="card">
-    <img class="icon" src="{% static 'img/' %}{{ service.icon }}" alt="">
+    <img class="cover wide" src="{{ service.image.url }}" alt="{{ service.title }}">
     <h3>Що входить</h3>
-    <ul class="checks">{% for point in service.points %}<li>{{ point }}</li>{% endfor %}</ul>
-    <p style="margin-top:18px"><b>Вартість:</b> {{ service.price }}</p>
+    <ul class="checks">{% for point in service.point_list %}<li>{{ point }}</li>{% endfor %}</ul>
+    <p style="margin-top:18px"><b>Вартість:</b> від {{ service.price_from|eur }}</p>
     <div class="btns" style="margin-top:18px"><a class="btn" href="{% url 'contacts' %}">Замовити консультацію</a></div>
   </div>
+  {% if projects %}
+    <h2>Наші проєкти за цим напрямом</h2>
+    <div class="grid">
+      {% for project in projects %}
+        <article class="card media-card"><img class="cover" src="{{ project.image.url }}" alt="" loading="lazy"><div class="meta">{{ project.client }} · {{ project.year }}</div><h3>{{ project.title }}</h3></article>
+      {% endfor %}
+    </div>
+  {% endif %}
   <div class="pills">
-    {% for key, title in others %}<a href="{% url 'services:detail' key %}">{{ title }}</a>{% endfor %}
+    {% for other in others %}<a href="{% url 'services:detail' other.slug %}">{{ other.title }}</a>{% endfor %}
   </div>
 {% endblock %}

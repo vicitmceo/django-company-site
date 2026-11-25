@@ -3,34 +3,51 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 
 from feedback.forms import ContactForm
+from .blocks import SectionLink, Stat
+from services.forms import PhotoForm
+from services.models import NewsArticle, Photo, Project, Service, TeamMember
 
 # Параметр rest потрібен лише для catch-all маршрутів: усе, що йде після
 # базової адреси розділу (наприклад /news/2026), ігнорується, і показується
 # головна сторінка цього розділу.
 
 
-HIGHLIGHTS = [
-    ("web", "Веб-розробка", "icon-web.svg", "Сайти, магазини та вебсервіси під ключ."),
-    ("mobile", "Мобільні застосунки", "icon-mobile.svg", "Додатки для iOS та Android."),
-    ("ai", "ШІ та автоматизація", "icon-ai.svg", "Чат-боти та аналітика даних."),
-    ("support", "Підтримка", "icon-support.svg", "Стабільність ваших продуктів 24/7."),
-]
-
-
 def home(request):
-    return render(request, "home.html", {"highlights": HIGHLIGHTS})
+    context = {
+        "highlights": Service.objects.all()[:4],
+        "latest_projects": Project.objects.select_related("service")[:3],
+        # складний словник з колекціями власних класів (Stat, SectionLink)
+        "page": {
+            "stats": [
+                Stat("10", "років на ринку"),
+                Stat(str(Project.objects.count()), "проєктів"),
+                Stat(str(TeamMember.objects.count()), "фахівців"),
+                Stat(str(Service.objects.count()), "послуг"),
+            ],
+            "sections": [
+                SectionLink("Новини", "Запуски, відкриття офісів і події компанії.", "news"),
+                SectionLink("Керівництво", "Люди, які визначають напрям розвитку.", "management"),
+                SectionLink("Про компанію", "Історія, місія та цінності «Обрій».", "about"),
+                SectionLink("Галерея", "Життя компанії у фото. Додайте своє!", "gallery"),
+            ],
+        },
+    }
+    return render(request, "home.html", context)
 
 
 def news(request, rest=None):
-    return render(request, "news.html", {"active": "news"})
+    return render(request, "news.html", {"active": "news", "articles": NewsArticle.objects.all()})
 
 
 def management(request, rest=None):
-    return render(request, "management.html", {"active": "management"})
+    return render(request, "management.html", {"active": "management", "members": TeamMember.objects.all()})
 
 
 def about(request, rest=None):
-    return render(request, "about.html", {"active": "about"})
+    return render(request, "about.html", {
+        "active": "about",
+        "projects": Project.objects.select_related("service")[:6],
+    })
 
 
 def contacts(request, rest=None):
@@ -44,6 +61,23 @@ def contacts(request, rest=None):
     else:
         form = ContactForm()
     return render(request, "contacts.html", {"active": "contacts", "form": form})
+
+
+def gallery(request, rest=None):
+    """Галерея: форма завантаження фото (multipart) + список фото з сервера."""
+    if request.method == "POST":
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()  # файл записується в MEDIA_ROOT/gallery/, рядок — у БД
+            messages.success(request, "Фото завантажено на сервер і додано до галереї.")
+            return redirect(f"{request.path}#upload")
+    else:
+        form = PhotoForm()
+    return render(request, "gallery.html", {
+        "active": "gallery",
+        "form": form,
+        "photos": Photo.objects.all(),
+    })
 
 
 # Підрозділи існуючих розділів: розділ -> {slug: дані сторінки}

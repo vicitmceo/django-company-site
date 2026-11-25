@@ -1,16 +1,16 @@
 {% extends "base.html" %}
-{% load static %}
+{% load company_filters %}
 {% block title %}Послуги{% endblock %}
 {% block content %}
   <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Послуги</div>
   <h1>Послуги</h1>
-  <p class="lead">Повний цикл розробки: від ідеї та дизайну до запуску і підтримки.</p>
+  <p class="lead">Повний цикл розробки: від ідеї та дизайну до запуску і підтримки. Усього послуг: {{ services|length }}.</p>
   <div class="grid">
-    {% for slug, service in services %}
-      <a class="card" href="{% url 'services:detail' slug %}">
-        <img class="icon" src="{% static 'img/' %}{{ service.icon }}" alt="">
+    {% for service in services %}
+      <a class="card media-card" href="{% url 'services:detail' service.slug %}">
+        <img class="cover" src="{{ service.image.url }}" alt="" loading="lazy">
         <h3>{{ service.title }}</h3><p>{{ service.summary }}</p>
-        <div class="meta" style="margin-top:12px">{{ service.price }}</div>
+        <div class="meta" style="margin-top:12px">від {{ service.price_from|eur }}</div>
       </a>
     {% endfor %}
   </div>

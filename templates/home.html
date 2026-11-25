@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load company_filters %}
 {% block content %}
   <section class="hero">
     <div>
@@ -14,27 +15,36 @@
   </section>
 
   <section class="stats" aria-label="Компанія в цифрах">
-    <div class="stat"><b>10</b>років на ринку</div>
-    <div class="stat"><b>200+</b>проєктів</div>
-    <div class="stat"><b>80</b>фахівців</div>
-    <div class="stat"><b>3</b>офіси в Європі</div>
+    {% for stat in page.stats %}<div class="stat"><b>{{ stat.value }}</b>{{ stat.label }}</div>{% endfor %}
   </section>
 
   <h2>Що ми робимо</h2>
   <div class="grid">
-    {% for slug, title, icon, text in highlights %}
-      <a class="card" href="{% url 'services:detail' slug %}">
-        <img class="icon" src="{% static 'img/' %}{{ icon }}" alt="">
-        <h3>{{ title }}</h3><p>{{ text }}</p>
+    {% for service in highlights %}
+      <a class="card media-card" href="{% url 'services:detail' service.slug %}">
+        <img class="cover" src="{{ service.image.url }}" alt="" loading="lazy">
+        <h3>{{ service.title }}</h3><p>{{ service.summary }}</p>
       </a>
     {% endfor %}
   </div>
 
+  {% with total=latest_projects|length %}
+    {% if total %}
+      <h2>Останні проєкти <span class="opt">({{ total }})</span></h2>
+      <div class="grid">
+        {% for project in latest_projects %}
+          <article class="card media-card"><img class="cover" src="{{ project.image.url }}" alt="" loading="lazy"><div class="meta">{{ project.client }} · {{ project.year }}</div><h3>{{ project.title }}</h3><p>{{ project.service.title }}, від {{ project.service.price_from|eur }}</p></article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="lead">Проєкти з'являться найближчим часом.</p>
+    {% endif %}
+  {% endwith %}
+
   <h2>Дізнайтеся більше</h2>
   <div class="grid">
-    <a class="card" href="{% url 'news' %}"><h3>Новини</h3><p>Запуски, відкриття офісів і події компанії.</p></a>
-    <a class="card" href="{% url 'management' %}"><h3>Керівництво</h3><p>Люди, які визначають напрям розвитку.</p></a>
-    <a class="card" href="{% url 'about' %}"><h3>Про компанію</h3><p>Історія, місія та цінності «Обрій».</p></a>
-    <a class="card" href="{% url 'contacts' %}"><h3>Контакти</h3><p>Офіси у Франції, Україні та Австрії.</p></a>
+    {% for section in page.sections %}
+      <a class="card" href="{% url section.url_name %}"><h3>{{ section.title }}</h3><p>{{ section.text }}</p></a>
+    {% endfor %}
   </div>
 {% endblock %}

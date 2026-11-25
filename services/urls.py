@@ -8,6 +8,6 @@ app_name = "services"
 # (слеш наприкінці необов'язковий); усе інше під /services/ веде на список послуг.
 urlpatterns = [
     path("", views.index, name="index"),
-    re_path(r"^(?P<slug>web|mobile|ai|support)/?$", views.detail, name="detail"),
+    re_path(r"^(?P<slug>[-\w]+)/?$", views.detail, name="detail"),
     path("<path:rest>", views.index, name="catchall"),
 ]

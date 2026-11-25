@@ -3,13 +3,18 @@
 {% block content %}
   <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Новини</div>
   <h1>Новини</h1>
-  <p class="lead">Що нового в компанії «Обрій».</p>
+  <p class="lead">Що нового в компанії «Обрій». Публікацій: {{ articles|length }}.</p>
   <div class="grid">
-    <article class="card"><span class="tag">Продукт</span><div class="meta">12 листопада 2026</div><h3>Запуск нової версії платформи</h3><p>Швидший інтерфейс, нові інструменти аналітики та повністю оновлена панель керування.</p></article>
-    <article class="card"><span class="tag">Компанія</span><div class="meta">28 жовтня 2026</div><h3>Відкрито офіс у Відні</h3><p>Розширюємо присутність у Європі та запрошуємо до команди нових фахівців.</p></article>
-    <article class="card"><span class="tag">Ювілей</span><div class="meta">5 жовтня 2026</div><h3>Нам 10 років</h3><p>Десять років роботи, понад двісті проєктів і сотні вдячних клієнтів.</p></article>
-    <article class="card"><span class="tag">ШІ</span><div class="meta">15 вересня 2026</div><h3>Новий напрям: ШІ та автоматизація</h3><p>Запускаємо послугу розробки чат-ботів та автоматизації бізнес-процесів.</p></article>
-    <article class="card"><span class="tag">Події</span><div class="meta">2 вересня 2026</div><h3>Виступ на ІТ-конференції у Києві</h3><p>Технічний директор розповіла про архітектуру масштабованих сервісів.</p></article>
-    <article class="card"><span class="tag">Команда</span><div class="meta">20 серпня 2026</div><h3>Стартувала програма стажувань</h3><p>Двадцять студентів отримали шанс попрацювати над реальними проєктами.</p></article>
+    {% for article in articles %}
+      <article class="card media-card">
+        <img class="cover" src="{{ article.image.url }}" alt="" loading="lazy">
+        <span class="tag">{{ article.category }}</span>
+        <div class="meta">{{ article.published_at|date:"j E Y" }}</div>
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary|truncatewords:14 }}</p>
+      </article>
+    {% empty %}
+      <p class="lead">Новин поки немає.</p>
+    {% endfor %}
   </div>
 {% endblock %}

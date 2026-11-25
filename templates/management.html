@@ -1,13 +1,23 @@
 {% extends "base.html" %}
+{% load company_filters %}
 {% block title %}Керівництво{% endblock %}
 {% block content %}
   <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Керівництво</div>
   <h1>Керівництво компанії</h1>
-  <p class="lead">Команда, яка відповідає за напрям розвитку та якість продуктів.</p>
+  <p class="lead">Команда, яка відповідає за напрям розвитку та якість продуктів ({{ members|length }} фахівців).</p>
+  <div class="pills">
+    <a href="{% url 'management-director' %}">Генеральний директор</a>
+    <a href="{% url 'management-cto' %}">Технічний директор</a>
+  </div>
   <div class="grid">
-    <a class="card" href="{% url 'management-director' %}"><div class="avatar">О</div><h3>Олександр Коваленко</h3><div class="meta">Генеральний директор</div><p>Стратегія компанії та ключові партнерства.</p></a>
-    <a class="card" href="{% url 'management-cto' %}"><div class="avatar">М</div><h3>Марія Шевчук</h3><div class="meta">Технічний директор</div><p>Архітектура продуктів та технічна команда.</p></a>
-    <div class="card"><div class="avatar">А</div><h3>Андрій Мельник</h3><div class="meta">Директор з розвитку</div><p>Нові ринки та відносини з клієнтами.</p></div>
-    <div class="card"><div class="avatar">І</div><h3>Ірина Бойко</h3><div class="meta">Фінансовий директор</div><p>Бюджети, планування та фінансова стабільність.</p></div>
+    {% for member in members %}
+      <div class="card">
+        {% if member.photo %}<img class="avatar-img" src="{{ member.photo.url }}" alt="{{ member.full_name }}" loading="lazy">
+        {% else %}<div class="avatar">{{ member.full_name|initials }}</div>{% endif %}
+        <h3>{{ member.full_name }}</h3>
+        <div class="meta">{{ member.position }} · {{ member.department }}</div>
+        <p>{{ member.bio|truncatewords:10 }}</p>
+      </div>
+    {% endfor %}
   </div>
 {% endblock %}

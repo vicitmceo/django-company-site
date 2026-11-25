@@ -1,4 +1,30 @@
-from django.test import SimpleTestCase
+import shutil
+import tempfile
+
+from django.core.management import call_command
+from django.test import TestCase, override_settings
+
+TEMP_MEDIA = tempfile.mkdtemp(prefix="test_media_site_")
+
+
+class SeededTestCase(TestCase):
+    """Тест із демо-даними; зображення пишуться у тимчасову MEDIA_ROOT."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._media = override_settings(MEDIA_ROOT=TEMP_MEDIA)
+        cls._media.enable()
+        super().setUpClass()
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed", verbosity=0)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        cls._media.disable()
+        shutil.rmtree(TEMP_MEDIA, ignore_errors=True)
 
 SECTIONS = {
     "news": ["/news/", "/news/yellowsubmarine", "/news/2026", "/news/щось-там", "/news/12345", "/news/last-article"],
@@ -9,7 +35,7 @@ SECTIONS = {
 TITLES = {"news": "Новини", "management": "Керівництво компанії", "about": "Про компанію", "contacts": "Контакти"}
 
 
-class RoutingTest(SimpleTestCase):
+class RoutingTest(SeededTestCase):
     def test_home(self):
         self.assertContains(self.client.get("/"), "відкривають новий обрій")
 
@@ -23,7 +49,7 @@ class RoutingTest(SimpleTestCase):
                     self.assertTemplateUsed(response, f"{section}.html")
 
 
-class SubsectionTest(SimpleTestCase):
+class SubsectionTest(SeededTestCase):
     def test_subsections_open_their_own_page(self):
         cases = {
             "/contacts/france": "Офіс у Франції",
@@ -44,7 +70,7 @@ class SubsectionTest(SimpleTestCase):
         self.assertTemplateUsed(response, "contacts.html")
 
 
-class NotFoundTest(SimpleTestCase):
+class NotFoundTest(SeededTestCase):
     def test_unknown_section_returns_404_page(self):
         for path in ("/blog/", "/xyz", "/shop/item/1"):
             with self.subTest(path=path):

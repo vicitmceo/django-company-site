@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load company_filters %}
 {% block title %}Про компанію{% endblock %}
 {% block content %}
   <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Про компанію</div>
@@ -15,4 +16,12 @@
     <div><b>2020</b> — офіс у Парижі, вихід на європейський ринок.</div>
     <div><b>2026</b> — понад 200 проєктів та новий напрям ШІ.</div>
   </div>
+  {% if projects %}
+    <h2>Наші проєкти</h2>
+    <div class="grid">
+      {% for project in projects %}
+        <article class="card media-card"><img class="cover" src="{{ project.image.url }}" alt="" loading="lazy"><div class="meta">{{ project.client }} · {{ project.year }}</div><h3>{{ project.title }}</h3><p>{{ project.description|truncatewords:12 }}</p></article>
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endblock %}

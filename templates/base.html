@@ -17,6 +17,7 @@
         <a href="{% url 'news' %}" {% if active == 'news' %}class="active" aria-current="page"{% endif %}>Новини</a>
         <a href="{% url 'management' %}" {% if active == 'management' %}class="active" aria-current="page"{% endif %}>Керівництво</a>
         <a href="{% url 'about' %}" {% if active == 'about' %}class="active" aria-current="page"{% endif %}>Про компанію</a>
+        <a href="{% url 'gallery' %}" {% if active == 'gallery' %}class="active" aria-current="page"{% endif %}>Галерея</a>
         <a href="{% url 'contacts' %}" {% if active == 'contacts' %}class="active" aria-current="page"{% endif %}>Контакти</a>
       </nav>
     </div>
