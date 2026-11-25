@@ -65,3 +65,35 @@ class FilterTest(SeededTestCase):
 
     def test_initials(self):
         self.assertEqual(initials("Олена Коваль"), "ОК")
+
+
+class SearchTest(SeededTestCase):
+    def test_finds_service_case_insensitively_for_cyrillic(self):
+        for q in ("веб", "ВЕБ", "Веб-розробка"):
+            with self.subTest(q=q):
+                response = self.client.get("/search/", {"q": q})
+                titles = [s.title for s in response.context["results"].services]
+                self.assertIn("Веб-розробка", titles)
+                self.assertContains(response, "знайдено")
+
+    def test_finds_news_and_projects(self):
+        results = self.client.get("/search/", {"q": "Відні"}).context["results"]
+        self.assertTrue(results.news)
+        projects = self.client.get("/search/", {"q": "Зернотрейд"}).context["results"].projects
+        self.assertEqual(len(projects), 1)
+
+    def test_nothing_found_shows_message(self):
+        response = self.client.get("/search/", {"q": "qwertyuiop"})
+        self.assertContains(response, "нічого не знайдено")
+        self.assertEqual(response.context["results"].total, 0)
+
+    def test_empty_and_too_short_queries(self):
+        self.assertContains(self.client.get("/search/"), "Введіть назву")
+        self.assertContains(self.client.get("/search/", {"q": "в"}), "закороткий")
+
+    def test_query_is_escaped(self):
+        response = self.client.get("/search/", {"q": "<script>alert(1)</script>"})
+        self.assertNotContains(response, "<script>alert(1)</script>")
+
+    def test_header_has_search_form_on_every_page(self):
+        self.assertContains(self.client.get("/about/"), 'action="/search/"')

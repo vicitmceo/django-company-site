@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from feedback.forms import ContactForm
 from .blocks import SectionLink, Stat
 from services.forms import PhotoForm
+from services.search import MIN_QUERY_LENGTH, search_site
 from services.models import NewsArticle, Photo, Project, Service, TeamMember
 
 # Параметр rest потрібен лише для catch-all маршрутів: усе, що йде після
@@ -61,6 +62,16 @@ def contacts(request, rest=None):
     else:
         form = ContactForm()
     return render(request, "contacts.html", {"active": "contacts", "form": form})
+
+
+def search(request):
+    """Пошук по послугах, новинах і проєктах (GET ?q=...)."""
+    query = request.GET.get("q", "").strip()[:100]
+    return render(request, "search.html", {
+        "query": query,
+        "results": search_site(query),
+        "min_length": MIN_QUERY_LENGTH,
+    })
 
 
 def gallery(request, rest=None):

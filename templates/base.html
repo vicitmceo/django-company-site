@@ -20,6 +20,10 @@
         <a href="{% url 'gallery' %}" {% if active == 'gallery' %}class="active" aria-current="page"{% endif %}>Галерея</a>
         <a href="{% url 'contacts' %}" {% if active == 'contacts' %}class="active" aria-current="page"{% endif %}>Контакти</a>
       </nav>
+      <form class="site-search" action="{% url 'search' %}" method="get" role="search">
+        <input type="search" name="q" value="{{ query|default:'' }}" placeholder="Пошук по сайту" aria-label="Пошук по сайту" maxlength="100">
+        <button type="submit" aria-label="Шукати">🔍</button>
+      </form>
     </div>
   </header>
   <main>{% block content %}{% endblock %}</main>

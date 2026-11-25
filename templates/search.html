@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load company_filters %}
+{% block title %}Пошук{% endblock %}
+{% block content %}
+  <div class="crumbs"><a href="{% url 'home' %}">Головна</a> / Пошук</div>
+  <h1>Пошук</h1>
+  <form class="search-big" action="{% url 'search' %}" method="get" role="search">
+    <input type="search" name="q" value="{{ query }}" placeholder="Наприклад: чат-бот, Відень, CRM" aria-label="Запит" maxlength="100" autofocus>
+    <button class="btn" type="submit">Знайти</button>
+  </form>
+
+  {% if not query %}
+    <p class="lead">Введіть назву послуги, новини чи проєкту.</p>
+  {% elif query|length < min_length %}
+    <p class="lead">Запит закороткий: введіть щонайменше {{ min_length }} символи.</p>
+  {% elif not results.total %}
+    <div class="empty">🔍 За запитом «<b>{{ query }}</b>» нічого не знайдено. Спробуйте іншу назву.</div>
+  {% else %}
+    <p class="lead">За запитом «<b>{{ query }}</b>» знайдено: <b>{{ results.total }}</b></p>
+
+    {% if results.services %}
+      <h2>Послуги <span class="opt">({{ results.services|length }})</span></h2>
+      <div class="grid fill">
+        {% for service in results.services %}
+          <a class="card media-card" href="{% url 'services:detail' service.slug %}">
+            <img class="cover" src="{{ service.image.url }}" alt="" loading="lazy">
+            <h3>{{ service.title }}</h3><p>{{ service.summary }}</p>
+            <div class="meta" style="margin-top:12px">від {{ service.price_from|eur }}</div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if results.news %}
+      <h2>Новини <span class="opt">({{ results.news|length }})</span></h2>
+      <div class="grid fill">
+        {% for article in results.news %}
+          <article class="card media-card">
+            <img class="cover" src="{{ article.image.url }}" alt="" loading="lazy">
+            <span class="tag">{{ article.category }}</span>
+            <div class="meta">{{ article.published_at|date:"j E Y" }}</div>
+            <h3>{{ article.title }}</h3><p>{{ article.summary|truncatewords:14 }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if results.projects %}
+      <h2>Проєкти <span class="opt">({{ results.projects|length }})</span></h2>
+      <div class="grid fill">
+        {% for project in results.projects %}
+          <article class="card media-card">
+            <img class="cover" src="{{ project.image.url }}" alt="" loading="lazy">
+            <div class="meta">{{ project.client }} · {{ project.year }}</div>
+            <h3>{{ project.title }}</h3><p>{{ project.service.title }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endblock %}
