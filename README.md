@@ -1,6 +1,6 @@
 # Вебдодаток «Інформація про компанію» (Django)
 
-Багатороздільний сайт компанії «Обрій» на Django без форм, моделей і БД: лише маршрутизація, views, шаблони та статика (CSS, SVG-зображення).
+Багатороздільний сайт компанії «Обрій» на Django: маршрутизація, views, шаблони, статика (CSS, SVG-зображення) та форма зворотного зв'язку з БД (SQLite).
 
 | Розділ | Адреса |
 |--------|--------|
@@ -10,6 +10,7 @@
 | Про компанію | `/about/` |
 | Контакти | `/contacts/` або `/contact/` |
 | Послуги (окремий додаток `services`) | `/services/` |
+| Форма зворотного зв'язку (додаток `feedback`) | на сторінці `/contacts/` |
 
 ## Підрозділи
 - Контакти: `/contacts/france`, `/contacts/ukraine`, `/contacts/austria`
@@ -30,6 +31,7 @@ company_site_proj/
 ├── manage.py
 ├── company_site/   основний додаток (settings.py, urls.py, views.py, tests.py)
 ├── services/       другий додаток: розділ «Послуги» та його підрозділи
+├── feedback/       форма контактів: модель ContactMessage, форма з валідацією, адмінка
 ├── static/         css/style.css, img/*.svg
 ├── templates/      base.html, home.html, news.html, management.html, about.html,
 │                   contacts.html, subsection.html, 404.html, services/
@@ -41,8 +43,13 @@ company_site_proj/
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+python manage.py migrate
 python manage.py runserver
 ```
 Відкрити: http://127.0.0.1:8000
 
 Тести: `python manage.py test`
+
+## Форма контактів
+На `/contacts/` (і `/contact/`) є форма: ім'я, email, телефон (необов'язково), тема, повідомлення (мін. 20 символів).
+Дані валідуються на сервері, зберігаються в `ContactMessage` і доступні в адмінці Django (`/admin/`, потрібен `createsuperuser`).

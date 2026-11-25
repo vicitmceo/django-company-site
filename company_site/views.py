@@ -1,5 +1,8 @@
+from django.contrib import messages
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from feedback.forms import ContactForm
 
 # Параметр rest потрібен лише для catch-all маршрутів: усе, що йде після
 # базової адреси розділу (наприклад /news/2026), ігнорується, і показується
@@ -31,7 +34,16 @@ def about(request, rest=None):
 
 
 def contacts(request, rest=None):
-    return render(request, "contacts.html", {"active": "contacts"})
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Дякуємо! Ваше повідомлення надіслано, ми відповімо найближчим часом.")
+            # Post/Redirect/Get: оновлення сторінки не відправить форму вдруге
+            return redirect(f"{request.path}#contact-form")
+    else:
+        form = ContactForm()
+    return render(request, "contacts.html", {"active": "contacts", "form": form})
 
 
 # Підрозділи існуючих розділів: розділ -> {slug: дані сторінки}
